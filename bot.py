@@ -1610,6 +1610,69 @@ async def slash_craft(interaction: discord.Interaction, recipe_id: str):
 bot.tree.add_command(systems)
 
 # -----------------------------
+# Comandi di bot1.py (unificati) - senza collisions su daily/balance
+# -----------------------------
+
+# CONFIG bot1 (hardcoded legacy). Se vuoi, posso metterli in .env.
+CANALE_ID = 1510742175347114004
+MIO_ID = 949015242871029820
+
+
+@bot.event
+async def on_guild_join(guild: discord.Guild):
+    channel = guild.system_channel or (guild.text_channels[0] if guild.text_channels else None)
+    if channel is not None:
+        await channel.send(
+            "Ciao! Sono B(ot)LL, il bot di samu. Scrivi `!aiuto` per vedere tutti i comandi!"
+        )
+
+
+@bot.command()
+async def spegni(ctx: commands.Context):
+    if ctx.author.id != MIO_ID:
+        await ctx.send("Non hai i permessi per farlo! ❌")
+        return
+    channel = bot.get_channel(CANALE_ID)
+    if channel:
+        await channel.send("Bot offline! 🔴")
+    await bot.close()
+
+
+@bot.command()
+async def ciao(ctx: commands.Context):
+    await ctx.send(f"ciao {ctx.message.author}, sono il bot di samu.")
+
+
+@bot.command(aliases=["cancella", "pulisci", "delete"])
+@commands.has_permissions(administrator=True)
+async def clear(ctx: commands.Context, amount: int = 1):
+    await ctx.channel.purge(limit=amount + 1)
+    await ctx.send(f"ho cancellato {amount} messaggi.")
+
+
+# Inside jokes
+@bot.command()
+async def sandro(ctx: commands.Context):
+    await ctx.send("boom")
+    await ctx.send("https://cdn.pixabay.com/photo/2024/05/03/16/59/nuclear-8737457_640.jpg")
+
+
+@bot.command()
+async def samu(ctx: commands.Context):
+    await ctx.send("my glorious king")
+    await ctx.send("https://images.steamusercontent.com/ugc/966474717666994289/9B1983B8752F554FD7A932226DF55F9988A3E644/")
+
+
+@bot.command()
+async def y(ctx: commands.Context):
+    percorso = "imgprova.jpeg"
+    await ctx.send(file=discord.File(percorso))
+
+@bot.command()
+async def striunizzo(ctx: commands.Context):
+    await ctx.send('https://i.ytimg.com/vi/NUdK1hfDYuA/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGHIgXig4MA8=&rs=AOn4CLDoaOkzyhYqM2fEWUtTE2rV_q1v6w')
+
+# -----------------------------
 # Import extra modules
 # -----------------------------
 # These modules add more commands and logic to keep this project large.
